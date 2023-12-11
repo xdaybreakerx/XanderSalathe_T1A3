@@ -95,4 +95,8 @@ def create_character_sheet():
 
     print(char_sheet)
     
+    # Write dictionary to file
+    with open("char_sheet.json", "w") as json_file:
+        json.dump(char_sheet, json_file)
+    
 create_character_sheet()
