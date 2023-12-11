@@ -80,11 +80,36 @@ def create_character_sheet():
         "weapon": pc_weapon,
     }
 
-    print(char_sheet) #this is used for troubleshooting and will be removed in final version
+    print(char_sheet) #this is used for troubleshooting and will be removed in final
 
     # Write dictionary to file
     with open("char_sheet.json", "w") as json_file:
         json.dump(char_sheet, json_file)
 
-
-create_character_sheet()
+def roll_to_hit():
+    # load data from JSON
+    with open('char_sheet.json', 'r') as f:
+        character_sheet = json.load(f)
+    
+    pc_strength_mod = character_sheet['strength_mod']
+    pc_proficiency_bonus = character_sheet['proficiency']
+    
+    print(f"PC strength mod from JSON file is {pc_strength_mod}. PC prof bonus is {pc_proficiency_bonus}")
+    
+    roll_modifier = input("Do you have (a)dvantage, (d)isadvantage or is it a (n)ormal roll?\n").lower()
+    
+    if roll_modifier.startswith("a"):
+        roll_value = "2d20kh1" # roll 2x d20, keep highest 1
+    elif roll_modifier.startswith("d"):
+        roll_value = "2d20kl1" # roll 2x d20, keep lowest 1
+    elif roll_modifier.startswith("n"):
+        roll_value = "1d20" # roll 1x d20
+    # else:
+    # need to create input handling here so that any other value returns an error and asks the question again
+    
+    roll_natural = d20.roll(roll_value)
+    roll_total = roll_natural.total + pc_strength_mod + pc_proficiency_bonus
+    
+    print(f"{roll_natural} is the die value, {roll_total} is the final value")
+    
+roll_to_hit()
