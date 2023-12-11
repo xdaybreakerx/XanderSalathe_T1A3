@@ -9,8 +9,9 @@ import math
 def create_character_sheet():
     char_info = True
     while char_info:
-        pc_level = int(input("What level are you adventurer? \n"))
-        pc_strength_mod = int(input("What is your Strength modifier? \n"))
+        pc_name = input("What is your characters name? \n")
+        pc_level = int(input(f"And what level is {pc_name}? \n"))
+        pc_strength_mod = int(input(f"What is {pc_name}s Strength modifier? \n"))
 
         while True:
             pc_weapon = input(
@@ -51,27 +52,12 @@ def create_character_sheet():
             brutal_critical = 2
         else:
             brutal_critical = 3
-            
+
         pc_proficiency_bonus = math.ceil(1 + (pc_level * 0.25))
 
-        print(
-            *[
-                "You are level",
-                (pc_level),
-                "with a strength modifier of",
-                (pc_strength_mod),
-                "\n",
-            ]
-        )
-        print(
-            *(
-                "Your rage bonus is",
-                (rage_bonus),
-                "and your proficiency bonus is",
-                (pc_proficiency_bonus),
-                "\n",
-            )
-        )
+        print(f"\nThanks for that {pc_name}. To confirm everything: \nYou are level {pc_level} with a strength modifier of {pc_strength_mod}. \n")
+        print(f"Based on your level, your rage bonus is {rage_bonus} and your proficiency bonus is {pc_proficiency_bonus}. \n")
+        print(f"Finally - like a true Barbarian you wield a {pc_weapon} to strike fear into the hearts of your enemies. \n")
 
         char_info_check = input(str("Is this all correct? \n")).lower()
         if char_info_check[0] == "n":
@@ -84,6 +70,7 @@ def create_character_sheet():
 
     char_sheet = {}
     char_sheet = {
+        "pc_name": pc_name,
         "level": pc_level,
         "proficiency": pc_proficiency_bonus,
         "strength_mod": pc_strength_mod,
@@ -93,10 +80,11 @@ def create_character_sheet():
         "weapon": pc_weapon,
     }
 
-    print(char_sheet)
-    
+    print(char_sheet) #this is used for troubleshooting and will be removed in final version
+
     # Write dictionary to file
     with open("char_sheet.json", "w") as json_file:
         json.dump(char_sheet, json_file)
-    
+
+
 create_character_sheet()
