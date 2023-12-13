@@ -46,57 +46,57 @@ def dragon_goodbye():
     )
 
 
+def get_input(prompt, options):
+    while True:
+        user_input = input(prompt).lower()
+        if user_input in options:
+            return options[user_input]
+        print("Invalid input. Please try again.\n")
+
+
+def calculate_values(level):
+    rage_bonus = 2 if level <= 8 else 3 if level <= 15 else 4
+    attack_per_turn = 1 if level <= 4 else 2
+    brutal_critical = (
+        1
+        if level >= 9 and level < 13
+        else 2
+        if level >= 13 and level < 17
+        else 3
+        if level >= 17
+        else 0
+    )
+    pc_proficiency_bonus = math.ceil(1 + (level * 0.25))
+    return rage_bonus, attack_per_turn, brutal_critical, pc_proficiency_bonus
+
+
 def create_character_sheet():
-    char_info = True
-    while char_info:
+    while True:
         pc_name = input("What is your characters name? \n")
-        pc_level = int(input(f"And what level is {pc_name}? \n"))
-        pc_strength_mod = int(input(f"What is {pc_name}s Strength modifier? \n"))
+        pc_level = int(
+            get_input(f"What level is {pc_name}? \n", {str(i): i for i in range(1, 21)})
+        )
+        pc_strength_mod = int(
+            get_input(
+                f"What is {pc_name}s Strength modifier? \n",
+                {str(i): i for i in range(-5, 6)},
+            )
+        )
 
-        while True:
-            pc_weapon = input(
-                "What weapon do you use? Choose: great(a)xe, great(s)word, or (m)aul:\n"
-            ).lower()
-            if pc_weapon[0] == "a":
-                pc_weapon = "greataxe"
-                break
-            elif pc_weapon[0] == "s":
-                pc_weapon = "greatsword"
-                break
-            elif pc_weapon[0] == "m":
-                pc_weapon = "maul"
-                break
-            else:
-                print(
-                    "I'm sorry - I dont understand! Try '(a)xe', '(s)word', or (m)aul \n"
-                )
+        pc_weapon = get_input(
+            "What weapon do you use? Choose: great(a)xe, great(s)word, or (m)aul:\n",
+            {"a": "greataxe", "s": "greatsword", "m": "maul"},
+        )
 
-        rage_bonus = 0
-        if pc_level <= 8:
-            rage_bonus = 2
-        elif pc_level <= 15:
-            rage_bonus = 3
-        else:
-            rage_bonus = 4
-
-        attack_per_turn = 0
-        if pc_level <= 4:
-            attack_per_turn = 1
-        else:
-            attack_per_turn = 2
-
-        brutal_critical = 0
-        if pc_level >= 9 and pc_level < 13:
-            brutal_critical = 1
-        elif pc_level >= 13 and pc_level < 17:
-            brutal_critical = 2
-        else:
-            brutal_critical = 3
-
-        pc_proficiency_bonus = math.ceil(1 + (pc_level * 0.25))
+        (
+            rage_bonus,
+            attack_per_turn,
+            brutal_critical,
+            pc_proficiency_bonus,
+        ) = calculate_values(pc_level)
 
         print(
-            f"\nThanks for that {pc_name}. To confirm everything: \nYou are level {pc_level} with a strength modifier of {pc_strength_mod}. \n"
+            f"\nThanks for that {pc_name}. To confirm everything: \nYou are level {pc_level} with a strength modifier of {pc_strength_mod}.\n"
         )
         print(
             f"Based on your level, your rage bonus is {rage_bonus} and your proficiency bonus is {pc_proficiency_bonus}. \n"
@@ -105,18 +105,14 @@ def create_character_sheet():
             f"Finally - like a true Barbarian you wield a {pc_weapon} to strike fear into the hearts of your enemies. \n"
         )
 
-        char_info_check = input(str("Is this all correct? \n")).lower()
-        if char_info_check[0] == "n":
-            print("Okay, let's get that information again. One more time! Let's go. \n")
-            char_info
-        elif char_info_check[0] == "y":
+        char_info_check = get_input(
+            "Is this all correct? (y/n) \n", {"y": True, "n": False}
+        )
+        if char_info_check:
             break
-        else:
-            print("I'm sorry - I dont understand! Try '(y)es' or '(n)o' \n")
 
     char_sheet = {}
     char_sheet = {
-        "pc_name": pc_name,
         "level": pc_level,
         "proficiency": pc_proficiency_bonus,
         "strength_mod": pc_strength_mod,
@@ -126,10 +122,8 @@ def create_character_sheet():
         "weapon": pc_weapon,
     }
 
-    print(char_sheet)  # this is used for troubleshooting and will be removed in final
-
-    # Write dictionary to file
     with open("char_sheet.json", "w") as json_file:
+        # Write dictionary to file
         json.dump(char_sheet, json_file)
 
 
