@@ -5,6 +5,45 @@ import d20
 import colored
 import math
 
+def dragon_hello():
+    print(
+        r"""
+        
+        ,     \    /      ,        
+       / \    )\__/(     / \       
+      /   \  (_\  /_)   /   \      
+ ____/_____\__\@  @/___/_____\____ 
+|             |\../|              |
+|              \VV/               |
+|         ----hello----           |
+|_________________________________|
+ |    /\ /      \\       \ /\    | 
+ |  /   V        ))       V   \  | 
+ |/     `       //        '     \| 
+ `              V                '
+        """
+    )
+
+
+def dragon_goodbye():
+    print(
+        r"""
+        
+        ,     \    /      ,        
+       / \    )\__/(     / \       
+      /   \  (_\  /_)   /   \      
+ ____/_____\__\@  @/___/_____\____ 
+|             |\../|              |
+|              \VV/               |
+|        ----goodbye----          |
+|_________________________________|
+ |    /\ /      \\       \ /\    | 
+ |  /   V        ))       V   \  | 
+ |/     `       //        '     \| 
+ `              V                '
+        """
+    )
+
 
 def create_character_sheet():
     char_info = True
@@ -93,23 +132,37 @@ def roll_to_hit():
     
     pc_strength_mod = character_sheet['strength_mod']
     pc_proficiency_bonus = character_sheet['proficiency']
+    pc_weapon = character_sheet['weapon']
     
     print(f"PC strength mod from JSON file is {pc_strength_mod}. PC prof bonus is {pc_proficiency_bonus}")
     
-    roll_modifier = input("Do you have (a)dvantage, (d)isadvantage or is it a (n)ormal roll?\n").lower()
+    while True:
+        roll_modifier = input("Do you have (a)dvantage, (d)isadvantage or is it a (n)ormal roll?\n").lower()
     
-    if roll_modifier.startswith("a"):
-        roll_value = "2d20kh1" # roll 2x d20, keep highest 1
-    elif roll_modifier.startswith("d"):
-        roll_value = "2d20kl1" # roll 2x d20, keep lowest 1
-    elif roll_modifier.startswith("n"):
-        roll_value = "1d20" # roll 1x d20
-    # else:
-    # need to create input handling here so that any other value returns an error and asks the question again
-    
+        if roll_modifier.startswith("a"):
+            roll_value = "2d20kh1" # roll 2x d20, keep highest 1
+            break
+        elif roll_modifier.startswith("d"):
+            roll_value = "2d20kl1" # roll 2x d20, keep lowest 1
+            break
+        elif roll_modifier.startswith("n"):
+            roll_value = "1d20" # roll 1x d20
+            break
+        else:
+            print("Invalid input. Please enter (a)dvantage, (d)isadvantage, or is it a (n)ormal roll?")    
+            
     roll_natural = d20.roll(roll_value)
     roll_total = roll_natural.total + pc_strength_mod + pc_proficiency_bonus
     
     print(f"{roll_natural} is the die value, {roll_total} is the final value")
+    
+    if roll_natural == 20:
+        message = "*** A natural twenty! ***\n"
+    elif roll_natural == 1:
+        message = "*** A nautral one! ***"
+    else:
+        message = f"You roll a {roll_total} to hit! Confirm you hit enemy AC."
+        
+    print(f"\nYou swing your {pc_weapon} - {message}\n")
     
 roll_to_hit()
