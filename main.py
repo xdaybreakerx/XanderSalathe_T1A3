@@ -1,4 +1,4 @@
-from functions import dragon_hello, create_character_sheet, combat, dragon_goodbye
+from functions import dragon_hello, create_character_sheet, update_character_sheet_menu, combat, dragon_goodbye
 
 dragon_hello()
 
@@ -17,7 +17,7 @@ while users_choice != "4":
     if users_choice == "1":
         create_character_sheet()
     elif users_choice == "2":
-        pass
+        update_character_sheet_menu()
     elif users_choice == "3":
         combat()
     elif users_choice == "4":

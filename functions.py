@@ -288,3 +288,101 @@ def combat_round(file_path):
 def combat():
     file_path = combat_summary_file()
     combat_round(file_path)
+
+def update_character_sheet_menu_selector():
+    print("1. Enter 1 to update your level")
+    print("2. Enter 2 to update your strength modifier")
+    print("3. Enter 3 to update your weapon")
+    print("4. Enter 4 to exit\n")
+    update_choice = input("Enter your selection: ")
+    return update_choice
+
+def update_character_sheet_menu():
+    choice = update_character_sheet_menu_selector
+    while True:
+        update_choice = update_character_sheet_menu_selector()
+        if update_choice == "1":
+            update_character_sheet_level()
+        elif update_choice == "2":
+            update_character_sheet_strength()
+        elif update_choice == "3":
+            update_character_sheet_weapon()
+        elif update_choice == "4":
+            break  
+        else:
+            print("Invalid Input - Please input 1-4")
+
+    
+def update_character_sheet_level():
+    loaded_character = load_character_sheet()
+
+    pc_level = int(
+        get_input(
+            f"What level is your new level? \n", {str(i): i for i in range(1, 21)}
+        )
+    )
+    rage_bonus = 0
+    attack_per_turn = 0
+    brutal_critical = 0
+    pc_proficiency_bonus = 0
+
+    (
+        rage_bonus,
+        attack_per_turn,
+        brutal_critical,
+        pc_proficiency_bonus,
+    ) = calculate_values(pc_level)
+
+    loaded_character["level"] = pc_level
+    loaded_character["rage_bonus"] = rage_bonus
+    loaded_character["attack_per_turn"] = attack_per_turn
+    loaded_character["brutal_critical"] = brutal_critical
+    loaded_character["proficiency"] = pc_proficiency_bonus
+
+    with open("char_sheet.json", "w") as json_file:
+        # Write dictionary to file
+        json.dump(loaded_character, json_file)
+    return
+
+def update_character_sheet_strength():
+    loaded_character = load_character_sheet()
+
+    pc_strength_mod = int(
+        get_input(
+            f"What is your new Strength modifier? \n",
+            {str(i): i for i in range(-5, 6)},
+        )
+    )
+
+    loaded_character["strength_mod"] = pc_strength_mod
+    with open("char_sheet.json", "w") as json_file:
+        json.dump(loaded_character, json_file)
+
+
+def update_character_sheet_weapon():
+    loaded_character = load_character_sheet()
+
+    pc_weapon = get_input(
+        "What weapon do you use? Choose: great(a)xe, great(s)word, or (m)aul:\n",
+        {"a": "greataxe", "s": "greatsword", "m": "maul"},
+    )
+
+    loaded_character["weapon"] = pc_weapon
+    with open("char_sheet.json", "w") as json_file:
+        json.dump(loaded_character, json_file)
+
+
+def load_character_sheet():
+    with open("char_sheet.json") as f:
+        character_sheet = json.load(f)
+
+        loaded_character = {
+            "level": character_sheet["level"],
+            "proficiency": character_sheet["proficiency"],
+            "strength_mod": character_sheet["strength_mod"],
+            "rage_bonus": character_sheet["rage_bonus"],
+            "attack_per_turn": character_sheet["attack_per_turn"],
+            "brutal_critical": character_sheet["brutal_critical"],
+            "weapon": character_sheet["weapon"],
+        }
+    return loaded_character
