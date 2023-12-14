@@ -1,8 +1,7 @@
 # import required functions for application
-import json
-import csv
-import d20
 import colored
+import d20
+import json
 import math
 
 
