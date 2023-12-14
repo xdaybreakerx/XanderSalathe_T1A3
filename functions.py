@@ -175,3 +175,80 @@ def roll_to_hit():
 
     print(f"\nYou swing your {pc_weapon} - {message}\n")
     return critical
+
+def combat_round():
+    with open("char_sheet.json") as f:
+        character_sheet = json.load(f)
+    # assign variables based on json file
+    pc_strength_mod = character_sheet["strength_mod"]
+    pc_weapon = character_sheet["weapon"]
+    pc_rage_bonus = character_sheet["rage_bonus"]
+    attack_per_turn = character_sheet["attack_per_turn"]
+    brutal_critical_no = str(character_sheet["brutal_critical"])
+
+    # maths for weapon damage types
+    greataxe = "1d12  + " + str(pc_strength_mod)
+    greatsword = "2d6 + " + str(pc_strength_mod)
+    maul = greatsword
+
+    rage_greataxe = greataxe + str(pc_rage_bonus)
+    rage_greatsword = greatsword + str(pc_rage_bonus)
+    rage_maul = rage_greatsword
+
+    critical_greataxe = greataxe + " + 1d12 + " + brutal_critical_no + "d12"
+    critical_greatsword = greatsword + " + 2d6 + " + brutal_critical_no + "d6"
+    critical_maul = critical_greatsword
+
+    rage_critical_greataxe = critical_greataxe + str(pc_rage_bonus)
+    rage_critical_greatsword = critical_greatsword + str(pc_rage_bonus)
+    rage_critical_maul = rage_critical_greatsword
+
+    # initialise variables for Rage tracking, and round tracking
+    rage_status = False
+    rage_counter = 0
+    round_number = 1
+    result = 0
+
+    while True:
+        # need to implement rage confirmation
+        print(f"Round {round_number} of Combat\n")
+        for attack in range(1, attack_per_turn + 1):
+            print(f"Attack {attack}:\n")
+            critical = roll_to_hit()
+
+            if pc_weapon == "greataxe":
+                result = d20.roll(greataxe)
+                if critical:
+                    result = d20.roll(critical_greataxe)
+                if rage_status:
+                    result = d20.roll(rage_greataxe)
+                    if critical:
+                        result = d20.roll(rage_critical_greataxe)
+                print(f"You deal {result} slashing damage!")
+
+            elif pc_weapon == "greatsword":
+                result = d20.roll(greatsword)
+                if critical:
+                    result = d20.roll(critical_greatsword)
+                if rage_status:
+                    result = d20.roll(rage_greatsword)
+                    if critical:
+                        result = d20.roll(rage_critical_greatsword)
+                print(f"You deal {result} slashing damage!")
+
+            elif pc_weapon == "maul":
+                result = d20.roll(maul)
+                if critical:
+                    result = d20.roll(critical_maul)
+                if rage_status:
+                    result = d20.roll(rage_maul)
+                    if critical:
+                        result = d20.roll(rage_critical_maul)
+                print(f"You deal {result} bludgeoning damage!")
+
+        # Ask the user if they want to continue to the next round
+        continue_combat = input("Continue to next round? (yes/no): ").lower()
+        if continue_combat != "yes":
+            print("Combat ended.")
+            break
+        round_number += 1
