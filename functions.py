@@ -1,5 +1,5 @@
 # import required functions for application
-import colored
+from colored import fg, attr
 import d20
 import os
 import json
@@ -7,8 +7,7 @@ import math
 
 
 def dragon_hello():
-    print(
-        r"""
+    print(fr"""
         
         ,     \    /      ,        
        / \    )\__/(     / \       
@@ -16,7 +15,7 @@ def dragon_hello():
  ____/_____\__\@  @/___/_____\____ 
 |             |\../|              |
 |              \VV/               |
-|         ----hello----           |
+|         {attr('reset')}----hello----{fg('red')}           |
 |_________________________________|
  |    /\ /      \\       \ /\    | 
  |  /   V        ))       V   \  | 
@@ -27,8 +26,7 @@ def dragon_hello():
 
 
 def dragon_goodbye():
-    print(
-        r"""
+    print(fr"""
         
         ,     \    /      ,        
        / \    )\__/(     / \       
@@ -36,7 +34,7 @@ def dragon_goodbye():
  ____/_____\__\@  @/___/_____\____ 
 |             |\../|              |
 |              \VV/               |
-|        ----goodbye----          |
+|        {attr('reset')}----goodbye----{fg('red')}          |
 |_________________________________|
  |    /\ /      \\       \ /\    | 
  |  /   V        ))       V   \  | 

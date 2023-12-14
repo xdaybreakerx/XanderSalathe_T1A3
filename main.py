@@ -1,14 +1,18 @@
+from colored import fg, attr
 from functions import dragon_hello, create_character_sheet, update_character_sheet_menu, combat, dragon_goodbye
 
 def main():
     try:
+        print(f"{fg('red')}")
         dragon_hello()
+        
+        print(f"{attr('reset')}")
 
         def create_menu():
-            print("1. Enter 1 to add a character")
-            print("2. Enter 2 to update a character")
-            print("3. Enter 3 to enter combat")
-            print("4. Enter 4 to exit\n")
+            print(f"1. Enter 1 to {fg('green')}add a character{attr('reset')}")
+            print(f"2. Enter 2 to {fg('blue')}update a character{attr('reset')}")
+            print(f"3. Enter 3 to {fg('red')}enter combat{attr('reset')}")
+            print(f"4. Enter 4 to {fg('yellow')}exit{attr('reset')}\n")
             choice = input("Enter your selection: ")
             return choice
 
@@ -25,14 +29,14 @@ def main():
             elif users_choice == "4":
                 continue
             else:
-                print("Invalid Input - Please input 1-4")
+                print("Invalid Input - Please input 1-4\n")
 
-        print("Thank you for using the Barbarian Dice Roller! \ngood bye!")
+        print(f"Thank you for using the Barbarian Dice Roller! \ngood bye!{fg('red')}")
 
         dragon_goodbye()
         
     except KeyboardInterrupt:
-        print("\nKeyboardInterrupt caught. Exiting the program.")
+        print(f"\nKeyboardInterrupt caught. Exiting the program.{fg('red')}")
         dragon_goodbye()
 
 main()
