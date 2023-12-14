@@ -5,6 +5,7 @@ import os
 import json
 import math
 
+
 def dragon_hello():
     print(
         r"""
@@ -125,6 +126,7 @@ def create_character_sheet():
         # Write dictionary to file
         json.dump(char_sheet, json_file)
 
+
 def combat_summary_file():
     # Relative path to the 'Combat_Summaries' folder in the root directory
     folder_path = "Combat_Summaries"
@@ -140,7 +142,8 @@ def combat_summary_file():
 
     return file_path
 
-def roll_to_hit():
+
+def roll_to_hit(file_path):
     # load data from JSON
     with open("char_sheet.json", "r") as f:
         character_sheet = json.load(f)
@@ -187,10 +190,19 @@ def roll_to_hit():
         message = f"You roll a {roll_total} to hit! Confirm you hit enemy AC."
         # critical = False
 
-    print(f"\nYou swing your {pc_weapon} - {message}\n")
+    console_and_text_output(file_path, f"\nYou swing your {pc_weapon} - {message}\n")
     return critical
 
-def combat_round():
+
+def console_and_text_output(file_path, *args, **kwargs):
+    print(*args, **kwargs)  # Print to console
+    with open(file_path, "a") as file:
+        print(*args, **kwargs, file=file)  # Print to file
+    # Code from Markus Dutschke
+    # https://stackoverflow.com/questions/11325019/how-to-output-to-the-console-and-file
+
+
+def combat_round(file_path):
     with open("char_sheet.json") as f:
         character_sheet = json.load(f)
     # assign variables based on json file
@@ -224,11 +236,10 @@ def combat_round():
     result = 0
 
     while True:
-        # need to implement rage confirmation
-        print(f"Round {round_number} of Combat\n")
+        console_and_text_output(file_path, f"\nRound {round_number} of Combat\n")
         for attack in range(1, attack_per_turn + 1):
-            print(f"Attack {attack}:\n")
-            critical = roll_to_hit()
+            console_and_text_output(file_path, f"Attack {attack}:\n")
+            critical = roll_to_hit(file_path)
 
             if pc_weapon == "greataxe":
                 result = d20.roll(greataxe)
@@ -238,7 +249,9 @@ def combat_round():
                     result = d20.roll(rage_greataxe)
                     if critical:
                         result = d20.roll(rage_critical_greataxe)
-                print(f"You deal {result} slashing damage!")
+                console_and_text_output(
+                    file_path, f"You deal {result} slashing damage!\n"
+                )
 
             elif pc_weapon == "greatsword":
                 result = d20.roll(greatsword)
@@ -248,7 +261,9 @@ def combat_round():
                     result = d20.roll(rage_greatsword)
                     if critical:
                         result = d20.roll(rage_critical_greatsword)
-                print(f"You deal {result} slashing damage!")
+                console_and_text_output(
+                    file_path, f"You deal {result} slashing damage!\n"
+                )
 
             elif pc_weapon == "maul":
                 result = d20.roll(maul)
@@ -258,11 +273,18 @@ def combat_round():
                     result = d20.roll(rage_maul)
                     if critical:
                         result = d20.roll(rage_critical_maul)
-                print(f"You deal {result} bludgeoning damage!")
+                console_and_text_output(
+                    file_path, f"You deal {result} bludgeoning damage!\n"
+                )
 
         # Ask the user if they want to continue to the next round
-        continue_combat = input("Continue to next round? (yes/no): ").lower()
+        continue_combat = input("Continue to next round? (yes/no): \n").lower()
         if continue_combat != "yes":
-            print("Combat ended.")
+            console_and_text_output(file_path, "\nCombat ended.")
             break
         round_number += 1
+
+
+def combat():
+    file_path = combat_summary_file()
+    combat_round(file_path)
