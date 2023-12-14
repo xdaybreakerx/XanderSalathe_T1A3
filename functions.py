@@ -203,103 +203,105 @@ def console_and_text_output(file_path, *args, **kwargs):
 
 
 def combat_round(file_path):
-        try: 
-            with open("char_sheet.json") as f:
-                character_sheet = json.load(f)
-            # assign variables based on json file
-            pc_strength_mod = character_sheet["strength_mod"]
-            pc_weapon = character_sheet["weapon"]
-            pc_rage_bonus = character_sheet["rage_bonus"]
-            attack_per_turn = character_sheet["attack_per_turn"]
-            brutal_critical_no = str(character_sheet["brutal_critical"])
+    try:
+        with open("char_sheet.json") as f:
+            character_sheet = json.load(f)
+        # assign variables based on json file
+        pc_strength_mod = character_sheet["strength_mod"]
+        pc_weapon = character_sheet["weapon"]
+        pc_rage_bonus = character_sheet["rage_bonus"]
+        attack_per_turn = character_sheet["attack_per_turn"]
+        brutal_critical_no = str(character_sheet["brutal_critical"])
 
-            # maths for weapon damage types
-            greataxe = "1d12  + " + str(pc_strength_mod)
-            greatsword = "2d6 + " + str(pc_strength_mod)
-            maul = greatsword
+        # maths for weapon damage types
+        greataxe = "1d12  + " + str(pc_strength_mod)
+        greatsword = "2d6 + " + str(pc_strength_mod)
+        maul = greatsword
 
-            rage_greataxe = greataxe + str(pc_rage_bonus)
-            rage_greatsword = greatsword + str(pc_rage_bonus)
-            rage_maul = rage_greatsword
+        rage_greataxe = greataxe + str(pc_rage_bonus)
+        rage_greatsword = greatsword + str(pc_rage_bonus)
+        rage_maul = rage_greatsword
 
-            critical_greataxe = greataxe + " + 1d12 + " + brutal_critical_no + "d12"
-            critical_greatsword = greatsword + " + 2d6 + " + brutal_critical_no + "d6"
-            critical_maul = critical_greatsword
+        critical_greataxe = greataxe + " + 1d12 + " + brutal_critical_no + "d12"
+        critical_greatsword = greatsword + " + 2d6 + " + brutal_critical_no + "d6"
+        critical_maul = critical_greatsword
 
-            rage_critical_greataxe = critical_greataxe + str(pc_rage_bonus)
-            rage_critical_greatsword = critical_greatsword + str(pc_rage_bonus)
-            rage_critical_maul = rage_critical_greatsword
+        rage_critical_greataxe = critical_greataxe + str(pc_rage_bonus)
+        rage_critical_greatsword = critical_greatsword + str(pc_rage_bonus)
+        rage_critical_maul = rage_critical_greatsword
 
-            # initialise variables for Rage tracking, and round tracking
-            rage_status = False
-            rage_counter = 0
-            round_number = 1
-            result = 0
+        # initialise variables for Rage tracking, and round tracking
+        rage_status = False
+        rage_counter = 0
+        round_number = 1
+        result = 0
 
-            while True:
-                console_and_text_output(file_path, f"\nRound {round_number} of Combat\n")
-                for attack in range(1, attack_per_turn + 1):
-                    console_and_text_output(file_path, f"Attack {attack}:\n")
-                    critical = roll_to_hit(file_path)
+        while True:
+            console_and_text_output(file_path, f"\nRound {round_number} of Combat\n")
+            for attack in range(1, attack_per_turn + 1):
+                console_and_text_output(file_path, f"Attack {attack}:\n")
+                critical = roll_to_hit(file_path)
 
-                    if pc_weapon == "greataxe":
-                        result = d20.roll(greataxe)
+                if pc_weapon == "greataxe":
+                    result = d20.roll(greataxe)
+                    if critical:
+                        result = d20.roll(critical_greataxe)
+                    if rage_status:
+                        result = d20.roll(rage_greataxe)
                         if critical:
-                            result = d20.roll(critical_greataxe)
-                        if rage_status:
-                            result = d20.roll(rage_greataxe)
-                            if critical:
-                                result = d20.roll(rage_critical_greataxe)
-                        console_and_text_output(
-                            file_path, f"You deal {result} slashing damage!\n"
-                        )
+                            result = d20.roll(rage_critical_greataxe)
+                    console_and_text_output(
+                        file_path, f"You deal {result} slashing damage!\n"
+                    )
 
-                    elif pc_weapon == "greatsword":
-                        result = d20.roll(greatsword)
+                elif pc_weapon == "greatsword":
+                    result = d20.roll(greatsword)
+                    if critical:
+                        result = d20.roll(critical_greatsword)
+                    if rage_status:
+                        result = d20.roll(rage_greatsword)
                         if critical:
-                            result = d20.roll(critical_greatsword)
-                        if rage_status:
-                            result = d20.roll(rage_greatsword)
-                            if critical:
-                                result = d20.roll(rage_critical_greatsword)
-                        console_and_text_output(
-                            file_path, f"You deal {result} slashing damage!\n"
-                        )
+                            result = d20.roll(rage_critical_greatsword)
+                    console_and_text_output(
+                        file_path, f"You deal {result} slashing damage!\n"
+                    )
 
-                    elif pc_weapon == "maul":
-                        result = d20.roll(maul)
+                elif pc_weapon == "maul":
+                    result = d20.roll(maul)
+                    if critical:
+                        result = d20.roll(critical_maul)
+                    if rage_status:
+                        result = d20.roll(rage_maul)
                         if critical:
-                            result = d20.roll(critical_maul)
-                        if rage_status:
-                            result = d20.roll(rage_maul)
-                            if critical:
-                                result = d20.roll(rage_critical_maul)
-                        console_and_text_output(
-                            file_path, f"You deal {result} bludgeoning damage!\n"
-                        )
+                            result = d20.roll(rage_critical_maul)
+                    console_and_text_output(
+                        file_path, f"You deal {result} bludgeoning damage!\n"
+                    )
 
-                # Ask the user if they want to continue to the next round
-                continue_combat = input("Continue to next round? (yes/no): \n").lower()
-                if continue_combat != "yes":
-                    console_and_text_output(file_path, "\nCombat ended.")
-                    break
-                round_number += 1
-        except FileNotFoundError:
-            print(
-                "We can't find your character sheet file. Please make sure you've created a character before starting combat!"
-            )
-            return
-        except KeyError:
-            print(
-                "We're missing some information in your character sheet. Can you please create it again?"
-            )
-            return
-        except json.JSONDecodeError as e:
-            print("Invalid JSON syntax:", e)
+            # Ask the user if they want to continue to the next round
+            continue_combat = input("Continue to next round? (yes/no): \n").lower()
+            if continue_combat != "yes":
+                console_and_text_output(file_path, "\nCombat ended.")
+                break
+            round_number += 1
+    except FileNotFoundError:
+        print(
+            "We can't find your character sheet file. Please make sure you've created a character before starting combat!"
+        )
+        return
+    except KeyError:
+        print(
+            "We're missing some information in your character sheet. Can you please create it again?"
+        )
+        return
+    except json.JSONDecodeError as e:
+        print("Invalid JSON syntax:", e)
+
 
 def combat():
     file_path = combat_summary_file()
     combat_round(file_path)
+
 
 def update_character_sheet_menu_selector():
     print("1. Enter 1 to update your level")
@@ -308,6 +310,7 @@ def update_character_sheet_menu_selector():
     print("4. Enter 4 to exit\n")
     update_choice = input("Enter your selection: ")
     return update_choice
+
 
 def update_character_sheet_menu():
     choice = update_character_sheet_menu_selector
@@ -320,13 +323,16 @@ def update_character_sheet_menu():
         elif update_choice == "3":
             update_character_sheet_weapon()
         elif update_choice == "4":
-            break  
+            break
         else:
             print("Invalid Input - Please input 1-4")
 
-    
+
 def update_character_sheet_level():
     loaded_character = load_character_sheet()
+
+    if not check_character_sheet_exists():
+        return False
 
     pc_level = int(
         get_input(
@@ -356,8 +362,12 @@ def update_character_sheet_level():
         json.dump(loaded_character, json_file)
     return
 
+
 def update_character_sheet_strength():
     loaded_character = load_character_sheet()
+
+    if not check_character_sheet_exists():
+        return False
 
     pc_strength_mod = int(
         get_input(
@@ -374,6 +384,9 @@ def update_character_sheet_strength():
 def update_character_sheet_weapon():
     loaded_character = load_character_sheet()
 
+    if not check_character_sheet_exists():
+        return False
+
     pc_weapon = get_input(
         "What weapon do you use? Choose: great(a)xe, great(s)word, or (m)aul:\n",
         {"a": "greataxe", "s": "greatsword", "m": "maul"},
@@ -385,19 +398,24 @@ def update_character_sheet_weapon():
 
 
 def load_character_sheet():
-    with open("char_sheet.json") as f:
-        character_sheet = json.load(f)
+    try:
+        with open("char_sheet.json") as f:
+            character_sheet = json.load(f)
 
-        loaded_character = {
-            "level": character_sheet["level"],
-            "proficiency": character_sheet["proficiency"],
-            "strength_mod": character_sheet["strength_mod"],
-            "rage_bonus": character_sheet["rage_bonus"],
-            "attack_per_turn": character_sheet["attack_per_turn"],
-            "brutal_critical": character_sheet["brutal_critical"],
-            "weapon": character_sheet["weapon"],
-        }
-    return loaded_character
+            loaded_character = {
+                "level": character_sheet["level"],
+                "proficiency": character_sheet["proficiency"],
+                "strength_mod": character_sheet["strength_mod"],
+                "rage_bonus": character_sheet["rage_bonus"],
+                "attack_per_turn": character_sheet["attack_per_turn"],
+                "brutal_critical": character_sheet["brutal_critical"],
+                "weapon": character_sheet["weapon"],
+            }
+
+        return loaded_character
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
 
 def check_character_sheet_exists():
     try:
