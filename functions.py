@@ -1,9 +1,9 @@
 # import required functions for application
 import colored
 import d20
+import os
 import json
 import math
-
 
 def dragon_hello():
     print(
@@ -125,6 +125,20 @@ def create_character_sheet():
         # Write dictionary to file
         json.dump(char_sheet, json_file)
 
+def combat_summary_file():
+    # Relative path to the 'Combat_Summaries' folder in the root directory
+    folder_path = "Combat_Summaries"
+    os.makedirs(folder_path, exist_ok=True)  # Create the folder if it doesn't exist
+
+    filename = "Combat_Summary_"
+
+    i = 0
+    while os.path.exists(os.path.join(folder_path, f"{filename}{i}.txt")):
+        i += 1
+
+    file_path = os.path.join(folder_path, f"{filename}{i}.txt")
+
+    return file_path
 
 def roll_to_hit():
     # load data from JSON
