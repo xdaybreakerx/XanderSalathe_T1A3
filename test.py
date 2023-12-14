@@ -1,7 +1,7 @@
 import pytest
 import json
 import functions
-from unittest.mock import patch
+from unittest.mock import patch, mock_open
 
 
 #  test, test, is pytest on?
@@ -38,3 +38,10 @@ def test_char_sheet_json():
     }
 
     assert data == expected_data
+    
+def test_file_not_found_handling(capsys):
+    with patch('functions.open', mock_open()) as mock_file:
+        mock_file.side_effect = FileNotFoundError
+        functions.combat()
+        captured = capsys.readouterr()
+        assert "can't find your character sheet file" in captured.out
