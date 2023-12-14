@@ -398,3 +398,13 @@ def load_character_sheet():
             "weapon": character_sheet["weapon"],
         }
     return loaded_character
+
+def check_character_sheet_exists():
+    try:
+        with open("char_sheet.json", "r") as json_file:
+            return True
+    except FileNotFoundError:
+        print(
+            "We can't find your character sheet file. Please make sure you've created a character before proceeding."
+        )
+        return False
