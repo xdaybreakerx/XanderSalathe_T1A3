@@ -2,4 +2,4 @@
 .pytest_cache
 __pycache__
 char_sheet.json
-Combat_Summaries
+combat_summaries

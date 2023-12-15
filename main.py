@@ -1,11 +1,18 @@
 from colored import fg, attr
-from functions import dragon_hello, create_character_sheet, update_character_sheet_menu, combat, dragon_goodbye
+from functions import (
+    dragon_hello,
+    create_character_sheet,
+    update_character_sheet_menu,
+    combat,
+    dragon_goodbye,
+)
+
 
 def main():
     try:
         print(f"{fg('red')}")
         dragon_hello()
-        
+
         print(f"{attr('reset')}")
 
         def create_menu():
@@ -34,9 +41,10 @@ def main():
         print(f"Thank you for using the Barbarian Dice Roller! \ngood bye!{fg('red')}")
 
         dragon_goodbye()
-        
+
     except KeyboardInterrupt:
         print(f"\nKeyboardInterrupt caught. Exiting the program.{fg('red')}")
         dragon_goodbye()
+
 
 main()
