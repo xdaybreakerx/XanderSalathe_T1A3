@@ -16,7 +16,7 @@ def dragon_hello():
  ____/_____\__\@  @/___/_____\____ 
 |             |\../|              |
 |              \VV/               |
-|         {attr('reset')}----hello----{fg('red')}           |
+|         {attr('reset')}----hello----{fg('light_goldenrod_2b')}           |
 |_________________________________|
  |    /\ /      \\       \ /\    | 
  |  /   V        ))       V   \  | 
@@ -36,7 +36,7 @@ def dragon_goodbye():
  ____/_____\__\@  @/___/_____\____ 
 |             |\../|              |
 |              \VV/               |
-|        {attr('reset')}----goodbye----{fg('red')}          |
+|        {attr('reset')}----goodbye----{fg('light_red')}          |
 |_________________________________|
  |    /\ /      \\       \ /\    | 
  |  /   V        ))       V   \  | 
@@ -72,19 +72,22 @@ def calculate_values(level):
 
 def create_character_sheet():
     while True:
-        pc_name = input("What is your characters name? \n")
+        pc_name = input(f"What is your {fg('deep_sky_blue_3a')}characters name?{attr('reset')} \n")
         pc_level = int(
-            get_input(f"What level is {pc_name}? \n", {str(i): i for i in range(1, 21)})
+            get_input(
+                f"What {fg('spring_green_3a')}level{attr('reset')} is {pc_name}? \n", 
+                {str(i): i for i in range(1, 21)}
+            )
         )
         pc_strength_mod = int(
             get_input(
-                f"What is {pc_name}s Strength modifier? \n",
+                f"What is {pc_name}s {fg('light_sea_green')}Strength modifier?{attr('reset')} \n",
                 {str(i): i for i in range(-5, 6)},
             )
         )
 
         pc_weapon = get_input(
-            "What weapon do you use? Choose: great(a)xe, great(s)word, or (m)aul:\n",
+            f"What weapon do you use? Choose: {fg('medium_spring_green')}great(a)xe, great(s)word, or (m)aul:{attr('reset')}\n",
             {"a": "greataxe", "s": "greatsword", "m": "maul"},
         )
 
@@ -96,13 +99,13 @@ def create_character_sheet():
         ) = calculate_values(pc_level)
 
         print(
-            f"\nThanks for that {pc_name}. To confirm everything: \nYou are level {pc_level} with a strength modifier of {pc_strength_mod}.\n"
+            f"\nThanks for that {fg('deep_sky_blue_3a')}{pc_name}{attr('reset')}. To confirm everything: \nYou are {fg('spring_green_3a')}level {pc_level}{attr('reset')} with a strength modifier of {fg('light_sea_green')}{pc_strength_mod}{attr('reset')}.\n"
         )
         print(
-            f"Based on your level, your rage bonus is {rage_bonus} and your proficiency bonus is {pc_proficiency_bonus}. \n"
+            f"Based on your level, your rage bonus is {fg('dark_turquoise')}{rage_bonus}{attr('reset')} and your proficiency bonus is {fg('steel_blue_3')}{pc_proficiency_bonus}.{attr('reset')} \n"
         )
         print(
-            f"Finally - like a true Barbarian you wield a {pc_weapon} to strike fear into the hearts of your enemies. \n"
+            f"Finally - like a true Barbarian you wield a {fg('medium_spring_green')}{pc_weapon}{attr('reset')} to strike fear into the hearts of your enemies. \n"
         )
 
         char_info_check = get_input(
@@ -320,10 +323,10 @@ def combat():
 
 
 def update_character_sheet_menu_selector():
-    print("1. Enter 1 to update your level")
-    print("2. Enter 2 to update your strength modifier")
-    print("3. Enter 3 to update your weapon")
-    print("4. Enter 4 to exit\n")
+    print(f"1. Enter 1 to {fg('plum_3')}update your level{attr('reset')}")
+    print(f"2. Enter 2 to {fg('pink_3')}update your strength modifier{attr('reset')}")
+    print(f"3. Enter 3 to {fg('purple_3')}update your weapon{attr('reset')}")
+    print(f"4. Enter 4 to {fg('medium_turquoise')}exit{attr('reset')}\n")
     update_choice = input("Enter your selection: ")
     return update_choice
 

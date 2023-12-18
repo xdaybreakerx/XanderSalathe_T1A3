@@ -10,16 +10,16 @@ from functions import (
 
 def main():
     try:
-        print(f"{fg('red')}")
+        print(f"{fg('light_goldenrod_2b')}")
         dragon_hello()
 
         print(f"{attr('reset')}")
 
         def create_menu():
-            print(f"1. Enter 1 to {fg('green')}add a character{attr('reset')}")
-            print(f"2. Enter 2 to {fg('blue')}update a character{attr('reset')}")
-            print(f"3. Enter 3 to {fg('red')}enter combat{attr('reset')}")
-            print(f"4. Enter 4 to {fg('yellow')}exit{attr('reset')}\n")
+            print(f"1. Enter 1 to {fg('orange_1')}add a character{attr('reset')}")
+            print(f"2. Enter 2 to {fg('orange_red_1')}update a character{attr('reset')}")
+            print(f"3. Enter 3 to {fg('red_1')}enter combat{attr('reset')}")
+            print(f"4. Enter 4 to {fg('medium_turquoise')}exit{attr('reset')}\n")
             choice = input("Enter your selection: ")
             return choice
 
@@ -38,12 +38,12 @@ def main():
             else:
                 print("Invalid Input - Please input 1-4\n")
 
-        print(f"Thank you for using the Barbarian Dice Roller! \ngood bye!{fg('red')}")
+        print(f"Thank you for using the Barbarian Dice Roller! \ngood bye!{fg('light_red')}")
 
         dragon_goodbye()
 
     except KeyboardInterrupt:
-        print(f"\nKeyboardInterrupt caught. Exiting the program.{fg('red')}")
+        print(f"\nKeyboardInterrupt caught. Exiting the program.{fg('light_red')}")
         dragon_goodbye()
 
 
