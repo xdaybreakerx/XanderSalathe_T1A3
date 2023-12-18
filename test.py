@@ -9,19 +9,41 @@ def test_basic():
     assert "" == ""
 
 
+# as this function is not critical to app functionality this is a simple test to ensure that it does not return an empty string.
 def test_dragon_hello():
     assert functions.dragon_hello != ""
 
 
+# as this function is not critical to app functionality this is a simple test to ensure that it does not return an empty string.
 def test_dragon_goodbye():
     assert functions.dragon_goodbye != ""
 
-# run test with -s flag
-def test_char_sheet_json():
-    with patch("functions.get_input") as mock_input:
-        mock_input.side_effect = ["10", "3", "greatsword", "y"]
-        # level, strength_mod, weapon, charInfoCheck
+# The following three functions test the create_character_sheet() function with different value sets to ensure it calculates correctly across level 1-20
+# The order of questions asked are: "character name", "character level", "character strength modifier", "weapon choice", "confirm input (y)"
+# Each test case is designed to validate user input against expected values that are manually calculated.
 
+def test_create_char_sheet_json_low():
+    with patch("builtins.input", side_effect=["character_name", "1", "-1", "m", "y"]):
+        functions.create_character_sheet()
+
+    with open("char_sheet.json", "r") as file:
+        data = json.load(file)
+
+    expected_data = {
+        "level": 1,
+        "proficiency": 2,
+        "strength_mod": -1,
+        "rage_bonus": 2,
+        "attack_per_turn": 1,
+        "brutal_critical": 0,
+        "weapon": "maul",
+    }
+
+    assert data == expected_data
+
+
+def test_create_char_sheet_json_med():
+    with patch("builtins.input", side_effect=["character_name", "10", "3", "s", "y"]):
         functions.create_character_sheet()
 
     with open("char_sheet.json", "r") as file:
@@ -38,9 +60,29 @@ def test_char_sheet_json():
     }
 
     assert data == expected_data
-    
+
+def test_create_char_sheet_json_high():
+    with patch("builtins.input", side_effect=["character_name", "20", "5", "a", "y"]):
+        functions.create_character_sheet()
+
+    with open("char_sheet.json", "r") as file:
+        data = json.load(file)
+
+    expected_data = {
+        "level": 20,
+        "proficiency": 6,
+        "strength_mod": 5,
+        "rage_bonus": 4,
+        "attack_per_turn": 2,
+        "brutal_critical": 3,
+        "weapon": "greataxe",
+    }
+
+    assert data == expected_data
+
+
 def test_file_not_found_handling(capsys):
-    with patch('functions.open', mock_open()) as mock_file:
+    with patch("functions.open", mock_open()) as mock_file:
         mock_file.side_effect = FileNotFoundError
         functions.combat()
         captured = capsys.readouterr()
