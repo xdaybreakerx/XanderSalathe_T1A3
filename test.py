@@ -1,4 +1,5 @@
 import pytest
+import os
 import json
 import functions
 from unittest.mock import patch, mock_open
@@ -16,9 +17,9 @@ def test_dragon_hello():
 def test_dragon_goodbye():
     assert functions.dragon_goodbye != ""
 
-# The following three functions test the create_character_sheet() function with different value sets to ensure it calculates correctly across level 1-20
+# The following function tests the create_character_sheet() function.
 # The order of questions asked are: "character name", "character level", "character strength modifier", "weapon choice", "confirm input (y)"
-# Each test case is designed to validate user input against expected values that are manually calculated.
+# The test case is designed to validate user input against expected values that are manually calculated.
 
 def test_create_char_sheet_json_low():
     with patch("builtins.input", side_effect=["character_name", "1", "-1", "m", "y"]):
@@ -39,9 +40,12 @@ def test_create_char_sheet_json_low():
 
     assert data == expected_data
 
-def test_create_char_sheet_json_med():
-    with patch("builtins.input", side_effect=["character_name", "10", "3", "s", "y"]):
-        functions.create_character_sheet()
+# The following test takes the previously created character sheet and uses the update_character_menu() function to change the level. 
+# The order of inputs are selecting: "update the character level", "set level to 10", "exit the menu"
+# Again the test case is designed to validate user input against expected values that are manually calculated.
+def test_update_char_sheet_json_level_10():
+    with patch("builtins.input", side_effect=["1", "10", "4"]):
+        functions.update_character_sheet_menu()
 
     with open("char_sheet.json", "r") as file:
         data = json.load(file)
@@ -49,18 +53,61 @@ def test_create_char_sheet_json_med():
     expected_data = {
         "level": 10,
         "proficiency": 4,
-        "strength_mod": 3,
+        "strength_mod": -1,
         "rage_bonus": 3,
         "attack_per_turn": 2,
         "brutal_critical": 1,
-        "weapon": "greatsword",
+        "weapon": "maul",
+    }
+
+    assert data == expected_data
+    
+# The following test is the same as the previous however updates the character level to 20. 
+# By testing the character at level 1, 10, and 20 we can validate the calculated variables across the entire allowed input range     
+def test_update_char_sheet_json_level_20():
+    with patch("builtins.input", side_effect=["1", "20", "4"]):
+        functions.update_character_sheet_menu()
+
+    with open("char_sheet.json", "r") as file:
+        data = json.load(file)
+
+    expected_data = {
+        "level": 20,
+        "proficiency": 6,
+        "strength_mod": -1,
+        "rage_bonus": 4,
+        "attack_per_turn": 2,
+        "brutal_critical": 3,
+        "weapon": "maul",
     }
 
     assert data == expected_data
 
-def test_create_char_sheet_json_high():
-    with patch("builtins.input", side_effect=["character_name", "20", "5", "a", "y"]):
-        functions.create_character_sheet()
+# Finally this test takes the previously created character sheet and uses the update_character_menu() function to change the strength modifier, and the weapon.
+# Based on the change it then validates that the data has been updated correctly
+# Finally it deletes the file created for testing purposes
+
+def test_update_char_sheet_json_strength_and_weapon():
+    with patch("builtins.input", side_effect=["2", "5", "4"]):
+        functions.update_character_sheet_menu()
+
+    with open("char_sheet.json", "r") as file:
+        data = json.load(file)
+
+    expected_data = {
+        "level": 20,
+        "proficiency": 6,
+        "strength_mod": 5, # strength mod now equal to 5
+        "rage_bonus": 4,
+        "attack_per_turn": 2,
+        "brutal_critical": 3,
+        "weapon": "maul",
+    }
+
+    assert data == expected_data
+    
+    with patch("builtins.input", side_effect=["3", "a", "4"]):
+        functions.update_character_sheet_menu()
 
     with open("char_sheet.json", "r") as file:
         data = json.load(file)
@@ -72,11 +119,12 @@ def test_create_char_sheet_json_high():
         "rage_bonus": 4,
         "attack_per_turn": 2,
         "brutal_critical": 3,
-        "weapon": "greataxe",
+        "weapon": "greataxe", # weapon now equal to great(a)xe
     }
-
+    
     assert data == expected_data
-
+    os.remove("char_sheet.json")
+    
 # The following test confirms that if the combat() function is called without a character sheet file created that the FileNotFoundError is captured correctly and provided to the user.
 # If the character sheet cannot be found, the program should call the check_character_sheet_exists() functions which outputs a message to the console. 
 # This test confirms that the phrase "can't find your character sheet file" is contained within the console output. 
