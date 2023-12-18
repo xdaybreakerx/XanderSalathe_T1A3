@@ -80,10 +80,33 @@ def test_create_char_sheet_json_high():
 
     assert data == expected_data
 
-
-def test_file_not_found_handling(capsys):
+# The following test confirms that if the combat() function is called without a character sheet file created that the FileNotFoundError is captured correctly and provided to the user.
+# If the character sheet cannot be found, the program should call the check_character_sheet_exists() functions which outputs a message to the console. 
+# This test confirms that the phrase "can't find your character sheet file" is contained within the console output. 
+def test_file_not_found_combat_handling(capsys):
     with patch("functions.open", mock_open()) as mock_file:
         mock_file.side_effect = FileNotFoundError
         functions.combat()
         captured = capsys.readouterr()
         assert "can't find your character sheet file" in captured.out
+
+# The following test confirms that if the combat() function is called with the character sheet present it completes the first round of combat successfully.
+def test_file_found_combat(capsys):
+    # set values for character sheet
+    mock_file_data = {
+        "level": 20,
+        "proficiency": 6,
+        "strength_mod": 5,
+        "rage_bonus": 4,
+        "attack_per_turn": 2,
+        "brutal_critical": 3,
+        "weapon": "greataxe",
+    }
+    # convert to JSON file
+    mock_json_data = json.dumps(mock_file_data)
+    
+    with patch("builtins.open", mock_open(read_data=mock_json_data)):
+        with patch('builtins.input', side_effect=["n", "a", "n", "a", "n"]):
+            # this input string is for "(n)o rage", "(a)dvantage roll", (n)o rage", "(a)dvantage roll", "do (n)ot continue to next round"
+            functions.combat()
+

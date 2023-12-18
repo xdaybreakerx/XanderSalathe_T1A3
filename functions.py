@@ -247,7 +247,7 @@ def combat_round(file_path):
                 if rage_choice == True:
                     rage_status = True
 
-                critical = roll_to_hit()
+                critical = roll_to_hit(file_path)
 
                 if loaded_character["weapon"] == "greataxe":
                     result = d20.roll(greataxe)
