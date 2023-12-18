@@ -123,7 +123,7 @@ def test_update_char_sheet_json_strength_and_weapon():
     }
     
     assert data == expected_data
-    os.remove("char_sheet.json")
+    os.remove("char_sheet.json")    
     
 # The following test confirms that if the combat() function is called without a character sheet file created that the FileNotFoundError is captured correctly and provided to the user.
 # If the character sheet cannot be found, the program should call the check_character_sheet_exists() functions which outputs a message to the console. 
@@ -156,7 +156,10 @@ def test_file_found_combat():
             functions.combat()
 
 # This test confirms that if called the combat() function will persist for multiple rounds until the user elects to end combat by pressing 'n' when prompted.
-def test_combat_multiple_rounds():
+# It confirms the function finishes without raising an error
+# It then confirms that the folder structure for the combat_summary text files is created in the correct location
+
+def test_combat_multiple_rounds_and_text_creation():
     mock_file_data = {
         "level": 20,
         "proficiency": 6,
@@ -174,6 +177,7 @@ def test_combat_multiple_rounds():
                                                   "a", "a", "y", # continue to next round
                                                   "a", "a", "n"]): # end combat at this point
             functions.combat()
+    assert os.path.exists("combat_summaries")
 
 # The following two tests confirm that the Rage Counter mechanic works correctly.
 # If the character is less than level 15, rage should drop after 10 rounds of combat. When this occurs a message is printed to the console. 
