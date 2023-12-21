@@ -49,6 +49,6 @@ Once the setup is complete, start the application by running:
 
 
 ## License
-MIT License
+Distributed under the terms of the MIT License
 
 ### Thank you for using the Barbarian Dice Roller for D&D 5e!
