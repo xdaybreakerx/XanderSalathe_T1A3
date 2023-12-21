@@ -4,6 +4,15 @@ import json
 import functions
 from unittest.mock import patch, mock_open
 
+#
+#
+#
+# CAUTION:
+# RUNNING TESTS WILL REMOVE EXISTING CHARACTER SHEET
+# PLEASE ENSURE A BACKUP IS COMPLETE BEFORE PROCEEDING
+#
+#
+#
 
 #  test, test, is pytest on?
 def test_basic():
