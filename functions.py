@@ -166,7 +166,7 @@ def roll_to_hit(file_path):
             roll_value = "1d20"  # roll 1x d20
             break
         elif roll_modifier.startswith("t"):
-            roll_value = "20"  # roll 2x d20, keep highest 1
+            roll_value = "20"  # Force a Natural 20 - t for testing. This should not be used for gameplay purposes.
             break
         else:
             print(
