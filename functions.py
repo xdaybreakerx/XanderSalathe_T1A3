@@ -75,19 +75,19 @@ def create_character_sheet():
         pc_name = input(f"What is your {fg('deep_sky_blue_3a')}characters name?{attr('reset')} \n")
         pc_level = int(
             get_input(
-                f"What {fg('spring_green_3a')}level{attr('reset')} is {pc_name}? \n", 
+                f"What {fg('spring_green_3a')}level{attr('reset')} is {pc_name}? (1-20):\n", 
                 {str(i): i for i in range(1, 21)}
             )
         )
         pc_strength_mod = int(
             get_input(
-                f"What is {pc_name}s {fg('light_sea_green')}Strength modifier?{attr('reset')} \n",
+                f"What is {pc_name}s {fg('light_sea_green')}Strength modifier?{attr('reset')} (-5 to 5): \n",
                 {str(i): i for i in range(-5, 6)},
             )
         )
 
         pc_weapon = get_input(
-            f"What weapon do you use? Choose: {fg('medium_spring_green')}great(a)xe, great(s)word, or (m)aul:{attr('reset')}\n",
+            f"What weapon do you use? Choose: {fg('medium_spring_green')}great(a)xe, great(s)word, or (m)aul: {attr('reset')}(a/s/m):\n",
             {"a": "greataxe", "s": "greatsword", "m": "maul"},
         )
 
@@ -109,7 +109,7 @@ def create_character_sheet():
         )
 
         char_info_check = get_input(
-            "Is this all correct? (y/n) \n", {"y": True, "n": False}
+            "Is this all correct? (y/n):\n", {"y": True, "n": False}
         )
         if char_info_check:
             break
@@ -153,7 +153,7 @@ def roll_to_hit(file_path):
 
     while True:
         roll_modifier = input(
-            f"Do you have {fg('green')}(a)dvantage{attr('reset')}, {fg('red')}(d)isadvantage{attr('reset')} or is it a {fg('blue')}(n)ormal roll?{attr('reset')}\n"
+            f"Do you have {fg('green')}(a)dvantage{attr('reset')}, {fg('red')}(d)isadvantage{attr('reset')} or is it a {fg('blue')}(n)ormal roll?{attr('reset')}  (a/d/n):\n"
         ).lower()
 
         if roll_modifier.startswith("a"):
@@ -170,7 +170,7 @@ def roll_to_hit(file_path):
             break
         else:
             print(
-                "Invalid input. Please enter (a)dvantage, (d)isadvantage, or is it a (n)ormal roll?\n"
+                "Invalid input. Please enter (a)dvantage, (d)isadvantage, or is it a (n)ormal roll? (a/d/n):\n"
             )
 
     roll_natural = d20.roll(roll_value)
@@ -355,7 +355,7 @@ def update_character_sheet_level():
 
     pc_level = int(
         get_input(
-            f"What level is your new level? \n", {str(i): i for i in range(1, 21)}
+            f"What level is your new level? (1-20):\n", {str(i): i for i in range(1, 21)}
         )
     )
     rage_bonus = 0
@@ -389,7 +389,7 @@ def update_character_sheet_strength():
 
     pc_strength_mod = int(
         get_input(
-            f"What is your new Strength modifier? \n",
+            f"What is your new Strength modifier? (-5 to 5):\n",
             {str(i): i for i in range(-5, 6)},
         )
     )
@@ -406,7 +406,7 @@ def update_character_sheet_weapon():
         return False
 
     pc_weapon = get_input(
-        "What weapon do you use? Choose: great(a)xe, great(s)word, or (m)aul:\n",
+        "What weapon do you use? Choose: great(a)xe, great(s)word, or (m)aul: (a/s/m):\n",
         {"a": "greataxe", "s": "greatsword", "m": "maul"},
     )
 

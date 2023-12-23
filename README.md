@@ -41,6 +41,9 @@ Once the setup is complete, start the application by running:
 
     Once the program is launched, use the parent menu to create, or update an existing character sheet. Once a valid character sheet is created, you can then enter combat. 
 
+    - If a question asks for inputs based on a prompt with (), then the input will be the letter within the brackets. 
+    - Eg, if given the option to select: great(s)word, great(a)xe, or (m)aul - the expected input is either 's', 'a', or 'm' respectively. 
+
     During the combat loop you can:
     - Enter Rage
     - Attack with disadvantage, advantage, or as a straight roll
