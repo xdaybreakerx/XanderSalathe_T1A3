@@ -1,5 +1,5 @@
 # Barbarian Dice Roller for D&D 5e
-
+![dragon says hello](./dragon_hello.png)
 ## Introduction
 The Barbarian Dice Roller is a Python3 terminal application specially designed for Dungeons & Dragons 5e players who play the Barbarian subclass. This tool simplifies the process of rolling dice in combat, such as attacking, damage calculation, and rage tracking - allowing you to spend more time doing normal barbarian things like drinking and picking up large rocks.
 
@@ -55,3 +55,4 @@ Once the setup is complete, start the application by running:
 Distributed under the terms of the MIT License
 
 ### Thank you for using the Barbarian Dice Roller for D&D 5e!
+![dragon says hello](./dragon_goodbye.png)
